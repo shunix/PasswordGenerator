@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Password Generator</string>
+    <string name="set_pwd_hint">Set Root Password:</string>
+    <string name="copy">Copy</string>
+    <string name="add_pwd_hint">Add Password</string>
+    <string name="pwd_id">Password Identifier:</string>
+    <string name="already_exists">Identifier already in use</string>
+    <string name="db_op_failed">Database operation failed, please backup your data and reinstall this app.</string>
+    <string name="delete_pwd_failed">Password delete failed, please restart app.</string>
+    <string name="warning">Warning</string>
+    <string name="confirm_hint">Delete this password?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="200dp"
+            android:layout_marginTop="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/pwd_id"
+            style="@style/hint_text_large"
+            android:id="@+id/textView"
+            android:layout_centerHorizontal="true"/>
+
+    <EditText
+            style="@style/input_pwd"
+            android:layout_below="@id/textView"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:inputType="textNoSuggestions"
+            android:textCursorDrawable="@null"
+            android:ems="10"
+            android:id="@+id/passText"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"/>
+</RelativeLayout>

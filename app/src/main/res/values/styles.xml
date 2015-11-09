@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="hint_text_large">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/hint_text_large</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+
+    <style name="input_pwd">
+        <item name="android:background">@drawable/lock_edit_text_shape_normal</item>
+        <item name="android:textSize">@dimen/hint_text_large</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+
+    <style name="name_text">
+        <item name="android:background">@drawable/lock_edit_text_shape_normal</item>
+        <item name="android:textSize">@dimen/name_text</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+
+    <style name="pwd_text">
+        <item name="android:background">@drawable/lock_edit_text_shape_normal</item>
+        <item name="android:textSize">@dimen/pwd_text</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+
+    <style name="btn">
+        <item name="android:background">@drawable/lock_edit_text_shape</item>
+        <item name="android:textSize">@dimen/btn</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+</resources>

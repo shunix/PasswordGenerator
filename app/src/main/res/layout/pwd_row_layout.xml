@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:paddingTop="5dp"
+              android:paddingBottom="5dp"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:textColor="@color/matrix_green"
+            android:id="@+id/nameText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent"/>
+
+    <TextView
+            android:textColor="@color/matrix_green"
+            android:id="@+id/pwdText"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_height="match_parent"/>
+
+    <Button
+            style="@style/btn"
+            android:focusable="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:text="@string/copy"
+            android:id="@+id/copyBtn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_height="35dp"/>
+</LinearLayout>

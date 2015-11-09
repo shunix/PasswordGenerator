@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">密码生成器</string>
+    <string name="set_pwd_hint">设定根密码:</string>
+    <string name="copy">复制</string>
+    <string name="add_pwd_hint">添加密码</string>
+    <string name="pwd_id">密码标识:</string>
+    <string name="already_exists">标识重复</string>
+    <string name="db_op_failed">数据库操作失败，请备份数据后重装应用。</string>
+    <string name="delete_pwd_failed">密码记录删除失败，请重新启动应用。</string>
+    <string name="warning">警告</string>
+    <string name="confirm_hint">确定删除这条记录吗？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+</resources>
