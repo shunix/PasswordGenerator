@@ -12,4 +12,8 @@
     <string name="confirm_hint">Delete this password?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="enter_email">The backup will be sent to you as email attachment, enter your email address below.</string>
+    <string name="send_email">Send Email</string>
+    <string name="backup">Backup</string>
+    <string name="file_not_ready">Backup file not ready</string>
 </resources>

@@ -12,4 +12,8 @@
     <string name="confirm_hint">确定删除这条记录吗？</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="enter_email">备份会以邮件附件形式发送，请输入您的email地址</string>
+    <string name="send_email">发送邮件</string>
+    <string name="backup">备份</string>
+    <string name="file_not_ready">备份文件没有准备好</string>
 </resources>

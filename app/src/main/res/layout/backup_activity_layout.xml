@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            style="@style/hint_text_mid"
+            android:text="@string/enter_email"
+            android:layout_marginTop="80dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"/>
+
+    <EditText
+            style="@style/input_pwd"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:inputType="textNoSuggestions"
+            android:textCursorDrawable="@null"
+            android:ems="10"
+            android:id="@+id/emailText"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"/>
+
+    <RelativeLayout
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content">
+        <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/statusIcon"
+                android:layout_width="50dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/checkmark"
+                android:layout_height="wrap_content"/>
+        <TextView
+                style="@style/hint_text_mid"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/fileText"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <Button
+            style="@style/btn"
+            android:layout_marginRight="50dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="90dp"
+            android:id="@+id/sendBtn"
+            android:text="@string/send_email"
+            android:layout_width="130dp"
+            android:layout_height="35dp"/>
+
+</LinearLayout>

@@ -77,8 +77,17 @@ public class PasswordSerializer {
         return true;
     }
 
+    public String getSerializedPath() {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.e(TAG, "SD card not mounted");
+            return null;
+        }
+        File rootDir = mContext.getExternalFilesDir(null);
+        return rootDir.getAbsolutePath() + File.separator + "data.dat";
+    }
+
     /**
-     * 反序列化到DB，默认从外置存储卡应用程序目录读取
+     * 反序列化到DB，默认从/sdcard/data.dat读取
      *
      * @return
      */
@@ -89,11 +98,7 @@ public class PasswordSerializer {
                 Log.e(TAG, "SD card not mounted");
                 return false;
             }
-            File rootDir = mContext.getExternalFilesDir(null);
-            if (!rootDir.exists()) {
-                Log.e(TAG, "File not exist");
-                return false;
-            }
+            File rootDir = Environment.getExternalStorageDirectory();
             File data = new File(rootDir.getAbsolutePath() + File.separator + "data.dat");
             if (!data.exists()) {
                 Log.e(TAG, "File not exist");

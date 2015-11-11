@@ -4,4 +4,8 @@
           android:icon="@drawable/add_pwd"
           android:showAsAction="ifRoom"
           android:title="@string/add_pwd_hint"/>
+    <item android:id="@+id/menu_backup"
+          android:icon="@drawable/backup"
+          android:showAsAction="ifRoom"
+          android:title="@string/backup"/>
 </menu>

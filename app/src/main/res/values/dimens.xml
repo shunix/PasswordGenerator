@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="hint_text_large">22sp</dimen>
+    <dimen name="hint_text_mid">18sp</dimen>
     <dimen name="name_text">16sp</dimen>
     <dimen name="pwd_text">15sp</dimen>
     <dimen name="btn">17sp</dimen>

@@ -8,6 +8,13 @@
         <item name="android:textColor">@color/matrix_green</item>
     </style>
 
+    <style name="hint_text_mid">
+        <item name="android:gravity">left</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/hint_text_mid</item>
+        <item name="android:textColor">@color/matrix_green</item>
+    </style>
+
     <style name="input_pwd">
         <item name="android:background">@drawable/lock_edit_text_shape_normal</item>
         <item name="android:textSize">@dimen/hint_text_large</item>
