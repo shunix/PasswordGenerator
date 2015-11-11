@@ -22,13 +22,13 @@ public class PasswordSerializer {
     private Context mContext;
     private AESEncryptor mEncryptor;
     private static final String TAG = PasswordSerializer.class.getName();
-    // ×Ö¶Î·Ö¸ô·û
+    // å­—æ®µåˆ†éš”ç¬¦
     private static final String COL_DIVIDER = "\001";
-    // ¼ÇÂ¼·Ö¸ô·û
+    // è®°å½•åˆ†éš”ç¬¦
     private static final String RECORD_DIVIDER = "\002";
 
     /**
-     * ÕâÀïcontextĞèÒª´«ÈëApplicationContext
+     * è¿™é‡Œcontextéœ€è¦ä¼ å…¥ApplicationContext
      * @param context
      */
     public PasswordSerializer(Context context) {
@@ -42,7 +42,7 @@ public class PasswordSerializer {
     }
 
     /**
-     * ĞòÁĞ»¯DBÖĞµÄÊı¾İ£¬Ä¬ÈÏ±£´æµ½ÍâÖÃ´æ´¢¿¨Ó¦ÓÃ³ÌĞòÄ¿Â¼£¬ÎÄ¼ş´æÔÚÊ±¸²¸Ç
+     * åºåˆ—åŒ–DBä¸­çš„æ•°æ®ï¼Œé»˜è®¤ä¿å­˜åˆ°å¤–ç½®å­˜å‚¨å¡åº”ç”¨ç¨‹åºç›®å½•ï¼Œæ–‡ä»¶å­˜åœ¨æ—¶è¦†ç›–
      */
     public boolean serialize() {
         DatabaseManager databaseManager = new DatabaseManager(mContext);
@@ -78,7 +78,7 @@ public class PasswordSerializer {
     }
 
     /**
-     * ·´ĞòÁĞ»¯µ½DB£¬Ä¬ÈÏ´ÓÍâÖÃ´æ´¢¿¨Ó¦ÓÃ³ÌĞòÄ¿Â¼¶ÁÈ¡
+     * ååºåˆ—åŒ–åˆ°DBï¼Œé»˜è®¤ä»å¤–ç½®å­˜å‚¨å¡åº”ç”¨ç¨‹åºç›®å½•è¯»å–
      *
      * @return
      */
