@@ -16,4 +16,10 @@
     <string name="send_email">发送邮件</string>
     <string name="backup">备份</string>
     <string name="file_not_ready">备份文件没有准备好</string>
+    <string name="restore_hint">从/sdcard/data.dat恢复记录，这项操作会覆盖当前数据库</string>
+    <string name="restore">恢复</string>
+    <string name="restore_result">恢复结果</string>
+    <string name="restore_result_success">恢复成功</string>
+    <string name="restore_result_failed">恢复失败，请检查备份文件后重启应用</string>
+    <string name="ok">OK</string>
 </resources>

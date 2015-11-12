@@ -53,7 +53,7 @@ public class BackupActivity extends BaseActivity {
                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailAddr});
                     intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.backup));
                     intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.backup));
-                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + serializer.getSerializedPath()));
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + serializer.getBackupFilePath()));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
                 }
@@ -72,7 +72,7 @@ public class BackupActivity extends BaseActivity {
     void updateUI(boolean isReady) {
         if (isReady) {
             PasswordSerializer serializer = new PasswordSerializer(mApp);
-            String filePath = serializer.getSerializedPath();
+            String filePath = serializer.getBackupFilePath();
             mFileText.setText(filePath);
             mStatusIcon.setImageResource(R.drawable.checkmark);
             mSendButton.setBackgroundResource(R.drawable.lock_edit_text_shape);

@@ -77,12 +77,21 @@ public class PasswordSerializer {
         return true;
     }
 
-    public String getSerializedPath() {
+    public String getBackupFilePath() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Log.e(TAG, "SD card not mounted");
             return null;
         }
         File rootDir = mContext.getExternalFilesDir(null);
+        return rootDir.getAbsolutePath() + File.separator + "data.dat";
+    }
+
+    public static String getRestoreFilePath() {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.e(TAG, "SD card not mounted");
+            return null;
+        }
+        File rootDir = Environment.getExternalStorageDirectory();
         return rootDir.getAbsolutePath() + File.separator + "data.dat";
     }
 

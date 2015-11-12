@@ -62,6 +62,9 @@ public class PasswordListActivity extends BaseActivity {
             case R.id.menu_backup:
                 startBackupActivity();
                 return true;
+            case R.id.menu_restore:
+                startRestoreActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -116,6 +119,12 @@ public class PasswordListActivity extends BaseActivity {
 
     private void startBackupActivity() {
         Intent intent = new Intent(PasswordListActivity.this, BackupActivity.class);
+        intent.putExtra(JUMP_WITHIN_APP, true);
+        startActivity(intent);
+    }
+
+    private void startRestoreActivity() {
+        Intent intent = new Intent(PasswordListActivity.this, RestoreActivity.class);
         intent.putExtra(JUMP_WITHIN_APP, true);
         startActivity(intent);
     }

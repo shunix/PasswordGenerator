@@ -16,4 +16,10 @@
     <string name="send_email">Send Email</string>
     <string name="backup">Backup</string>
     <string name="file_not_ready">Backup file not ready</string>
+    <string name="restore_hint">Restoring from /sdcard/data.dat, will overwrite current database.</string>
+    <string name="restore">Restore</string>
+    <string name="restore_result">Restore result</string>
+    <string name="restore_result_success">Restore success</string>
+    <string name="restore_result_failed">Restore failed, please check the backup file and restart app</string>
+    <string name="ok">OK</string>
 </resources>
