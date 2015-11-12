@@ -15,7 +15,7 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
-            android:inputType="textNoSuggestions"
+            android:inputType="textEmailAddress"
             android:textCursorDrawable="@null"
             android:ems="10"
             android:id="@+id/emailText"

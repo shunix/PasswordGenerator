@@ -53,7 +53,7 @@ public class BackupActivity extends BaseActivity {
             mSendButton.setBackgroundResource(R.drawable.lock_edit_text_shape);
             mSendButton.setClickable(true);
         } else {
-            mFileText.setText("");
+            mFileText.setText(getString(R.string.file_not_ready));
             mStatusIcon.setImageResource(R.drawable.error_alert);
             mSendButton.setBackgroundResource(R.drawable.lock_edit_text_shape_pressed);
             mSendButton.setClickable(false);
