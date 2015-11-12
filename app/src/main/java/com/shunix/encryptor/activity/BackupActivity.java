@@ -1,10 +1,14 @@
 package com.shunix.encryptor.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,12 +27,14 @@ public class BackupActivity extends BaseActivity {
     private ImageView mStatusIcon;
     private TextView mFileText;
     private Button mSendButton;
+    private Animation mShakeAnim;
     private final static String TAG = BackupActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backup_activity_layout);
+        mShakeAnim = AnimationUtils.loadAnimation(mApp, R.anim.edit_text_shake);
         mEmailText = (EditText) findViewById(R.id.emailText);
         mStatusIcon = (ImageView) findViewById(R.id.statusIcon);
         mFileText = (TextView) findViewById(R.id.fileText);
@@ -36,9 +42,28 @@ public class BackupActivity extends BaseActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO send email with attachment here.
+                String emailAddr = mEmailText.getText().toString();
+                if (TextUtils.isEmpty(emailAddr)) {
+                    mEmailText.setText("");
+                    mEmailText.startAnimation(mShakeAnim);
+                } else {
+                    PasswordSerializer serializer = new PasswordSerializer(mApp);
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("message/rfc822");
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailAddr});
+                    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.backup));
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.backup));
+                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + serializer.getSerializedPath()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
+                }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateUI(false);
         BackupTask task = new BackupTask(this);
         task.execute();
