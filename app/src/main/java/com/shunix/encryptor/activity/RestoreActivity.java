@@ -69,8 +69,7 @@ public class RestoreActivity extends BaseActivity {
         DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startPasswordListActivity();
-                RestoreActivity.this.finish();
+                onBackPressed();
             }
         };
         if (isSuccess) {
