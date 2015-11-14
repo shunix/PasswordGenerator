@@ -18,6 +18,8 @@ import com.shunix.encryptor.R;
 import com.shunix.encryptor.database.DatabaseManager;
 import com.shunix.encryptor.utils.AESEncryptor;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author shunix
  * @since 2015/11/05
@@ -26,7 +28,6 @@ public class AddPasswordActivity extends BaseActivity {
     private EditText mEditText;
     private ProgressBar mProgressBar;
     private Animation mShakeAnim;
-    private DatabaseManager mDatabaseManager;
     private static final String TAG = AddPasswordActivity.class.getName();
 
     TextView.OnEditorActionListener mListener = new TextView.OnEditorActionListener() {
@@ -40,7 +41,7 @@ public class AddPasswordActivity extends BaseActivity {
                     mEditText.startAnimation(mShakeAnim);
                 } else {
                     try {
-                        PasswordTask task = new PasswordTask();
+                        PasswordTask task = new PasswordTask(AddPasswordActivity.this);
                         task.execute(text);
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
@@ -51,44 +52,61 @@ public class AddPasswordActivity extends BaseActivity {
         }
     };
 
-    class PasswordTask extends AsyncTask<String, Void, String[]> {
+    static class PasswordTask extends AsyncTask<String, Void, String[]> {
+        private WeakReference<AddPasswordActivity> mActivity;
+
+        public PasswordTask(AddPasswordActivity activity) {
+            mActivity = new WeakReference<AddPasswordActivity>(activity);
+        }
+
         @Override
         protected String[] doInBackground(String... strings) {
+            if (mActivity.get() == null) {
+                return null;
+            }
+            final AddPasswordActivity activity = mActivity.get();
             String[] params = strings.clone();
             String encryptedPwd = null;
             if (params.length != 1) {
                 cancel(true);
             }
             if (!TextUtils.isEmpty(params[0])) {
-                String result = mDatabaseManager.queryPassword(params[0]);
-                if (!TextUtils.isEmpty(result)) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(mApp, getString(R.string.already_exists), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    cancel(true);
-                } else {
-                    String rootPwd = mApp.getRootPwdInMemory();
-                    if (!TextUtils.isEmpty(rootPwd)) {
-                        long timestamp = System.currentTimeMillis();
-                        AESEncryptor encryptor = new AESEncryptor(rootPwd);
-                        encryptedPwd = encryptor.encrypt(params[0] + timestamp);
-                        if (encryptedPwd.length() > 16) {
-                            encryptedPwd = encryptedPwd.substring(0, 16);
-                        }
-                        boolean dbResult = mDatabaseManager.insertPassword(params[0], encryptedPwd, timestamp);
-                        if (!dbResult) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(mApp, getString(R.string.db_op_failed), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            cancel(true);
+                DatabaseManager databaseManager = new DatabaseManager(activity.mApp);
+                try {
+                    String result = databaseManager.queryPassword(params[0]);
+                    if (!TextUtils.isEmpty(result)) {
+                        mActivity.get().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, activity.getString(R.string.already_exists), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        cancel(true);
+                    } else {
+                        String rootPwd = activity.mApp.getRootPwdInMemory();
+                        if (!TextUtils.isEmpty(rootPwd)) {
+                            long timestamp = System.currentTimeMillis();
+                            AESEncryptor encryptor = new AESEncryptor(rootPwd);
+                            encryptedPwd = encryptor.encrypt(params[0] + timestamp);
+                            if (encryptedPwd.length() > 16) {
+                                encryptedPwd = encryptedPwd.substring(0, 16);
+                            }
+                            boolean dbResult = databaseManager.insertPassword(params[0], encryptedPwd, timestamp);
+                            if (!dbResult) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(activity, activity.getString(R.string.db_op_failed), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                cancel(true);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                } finally {
+                    databaseManager.close();
                 }
             }
             return new String[] {params[0], encryptedPwd};
@@ -97,29 +115,50 @@ public class AddPasswordActivity extends BaseActivity {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            mProgressBar.setVisibility(View.GONE);
+            if (mActivity.get() != null) {
+                mActivity.get().hideProgressBar();
+            }
         }
 
         @Override
         protected void onPostExecute(String[] s) {
             super.onPostExecute(s);
-            mProgressBar.setVisibility(View.GONE);
+            if (mActivity.get() != null) {
+                mActivity.get().hideProgressBar();
+            }
             startResultActivity(s[0], s[1]);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressBar.setVisibility(View.VISIBLE);
+            if (mActivity.get() != null) {
+                mActivity.get().showProgressBar();
+            }
         }
 
         private void startResultActivity(String name, String pwd) {
-            Intent intent = new Intent(AddPasswordActivity.this, AddPasswordResultActivity.class);
-            intent.putExtra(AddPasswordResultActivity.NAME_KEY, name);
-            intent.putExtra(AddPasswordResultActivity.PWD_KEY, pwd);
-            intent.putExtra(JUMP_WITHIN_APP, true);
-            startActivity(intent);
-            finish();
+            if (mActivity.get() != null) {
+                AddPasswordActivity activity = mActivity.get();
+                Intent intent = new Intent(activity, AddPasswordResultActivity.class);
+                intent.putExtra(AddPasswordResultActivity.NAME_KEY, name);
+                intent.putExtra(AddPasswordResultActivity.PWD_KEY, pwd);
+                intent.putExtra(JUMP_WITHIN_APP, true);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        }
+    }
+
+    void showProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void hideProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -131,18 +170,6 @@ public class AddPasswordActivity extends BaseActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mEditText = (EditText) findViewById(R.id.passText);
         mEditText.setOnEditorActionListener(mListener);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mDatabaseManager = new DatabaseManager(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mDatabaseManager.close();
     }
 
     @Override
