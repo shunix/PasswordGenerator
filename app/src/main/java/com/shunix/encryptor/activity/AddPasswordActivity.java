@@ -3,6 +3,7 @@ package com.shunix.encryptor.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +29,7 @@ public class AddPasswordActivity extends BaseActivity {
     private EditText mEditText;
     private ProgressBar mProgressBar;
     private Animation mShakeAnim;
+    private int mPasswordLength;
     private static final String TAG = AddPasswordActivity.class.getName();
 
     TextView.OnEditorActionListener mListener = new TextView.OnEditorActionListener() {
@@ -88,8 +90,8 @@ public class AddPasswordActivity extends BaseActivity {
                             long timestamp = System.currentTimeMillis();
                             AESEncryptor encryptor = new AESEncryptor(rootPwd);
                             encryptedPwd = encryptor.encrypt(params[0] + timestamp);
-                            if (encryptedPwd.length() > 16) {
-                                encryptedPwd = encryptedPwd.substring(0, 16);
+                            if (encryptedPwd.length() > activity.mPasswordLength) {
+                                encryptedPwd = encryptedPwd.substring(0, activity.mPasswordLength);
                             }
                             boolean dbResult = databaseManager.insertPassword(params[0], encryptedPwd, timestamp);
                             if (!dbResult) {
@@ -170,6 +172,14 @@ public class AddPasswordActivity extends BaseActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mEditText = (EditText) findViewById(R.id.passText);
         mEditText.setOnEditorActionListener(mListener);
+        String level = PreferenceManager.getDefaultSharedPreferences(mApp).getString(getString(R.string.pref_enc_key), getString(R.string.high_val));
+        if (level.equals(getString(R.string.low_val))) {
+            mPasswordLength = 8;
+        } else if (level.equals(getString(R.string.mid_val))) {
+            mPasswordLength = 12;
+        } else {
+            mPasswordLength = 16;
+        }
     }
 
     @Override

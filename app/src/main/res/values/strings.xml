@@ -22,4 +22,23 @@
     <string name="restore_result_success">Restore success</string>
     <string name="restore_result_failed">Restore failed, please check the backup file and restart app</string>
     <string name="ok">OK</string>
+    <string name="pref_enc_key">pref_enc_key</string>
+    <string name="encryption_level">Encryption Level</string>
+    <string name="high">High (16 characters)</string>
+    <string name="mid">Medium (12 characters)</string>
+    <string name="low">Low (8 characters)</string>
+    <string-array name="encryption_levels">
+        <item>@string/high</item>
+        <item>@string/mid</item>
+        <item>@string/low</item>
+    </string-array>
+    <string name="high_val">high</string>
+    <string name="mid_val">mid</string>
+    <string name="low_val">low</string>
+    <string-array name="encryption_values">
+        <item>@string/high_val</item>
+        <item>@string/mid_val</item>
+        <item>@string/low_val</item>
+    </string-array>
+    <string name="settings">Settings</string>
 </resources>
