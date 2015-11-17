@@ -33,4 +33,12 @@
         <item>@string/low</item>
     </string-array>
     <string name="settings">设置</string>
+    <string name="high_val">high</string>
+    <string name="mid_val">mid</string>
+    <string name="low_val">low</string>
+    <string-array name="encryption_values">
+        <item>@string/high_val</item>
+        <item>@string/mid_val</item>
+        <item>@string/low_val</item>
+    </string-array>
 </resources>
