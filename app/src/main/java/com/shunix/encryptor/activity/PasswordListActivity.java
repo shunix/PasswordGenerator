@@ -1,5 +1,6 @@
 package com.shunix.encryptor.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.AsyncTask;
@@ -34,7 +35,7 @@ public class PasswordListActivity extends BaseActivity {
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startAddPwdActivity();
+                startActivity(AddPasswordActivity.class);
             }
         });
         updateUI();
@@ -57,16 +58,16 @@ public class PasswordListActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add:
-                startAddPwdActivity();
+                startActivity(AddPasswordActivity.class);
                 return true;
             case R.id.menu_backup:
-                startBackupActivity();
+                startActivity(BackupActivity.class);
                 return true;
             case R.id.menu_restore:
-                startRestoreActivity();
+                startActivity(RestoreActivity.class);
                 return true;
             case R.id.menu_setting:
-                startSettingsActivity();
+                startActivity(SettingsActivity.class);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -114,26 +115,8 @@ public class PasswordListActivity extends BaseActivity {
         }
     }
 
-    private void startAddPwdActivity() {
-        Intent intent = new Intent(PasswordListActivity.this, AddPasswordActivity.class);
-        intent.putExtra(JUMP_WITHIN_APP, true);
-        startActivity(intent);
-    }
-
-    private void startBackupActivity() {
-        Intent intent = new Intent(PasswordListActivity.this, BackupActivity.class);
-        intent.putExtra(JUMP_WITHIN_APP, true);
-        startActivity(intent);
-    }
-
-    private void startRestoreActivity() {
-        Intent intent = new Intent(PasswordListActivity.this, RestoreActivity.class);
-        intent.putExtra(JUMP_WITHIN_APP, true);
-        startActivity(intent);
-    }
-
-    private void startSettingsActivity() {
-        Intent intent = new Intent(PasswordListActivity.this, SettingsActivity.class);
+    private void startActivity(Class<? extends Activity> clazz) {
+        Intent intent = new Intent(PasswordListActivity.this, clazz);
         intent.putExtra(JUMP_WITHIN_APP, true);
         startActivity(intent);
     }
