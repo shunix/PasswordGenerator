@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.content.*;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.shunix.encryptor.R;
+import com.shunix.encryptor.aidl.IFloatingInterface;
 import com.shunix.encryptor.database.DatabaseManager;
+import com.shunix.encryptor.service.FloatingService;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -22,6 +25,7 @@ public class PasswordListActivity extends BaseActivity {
     private ListView mListView;
     private Button mAddButton;
     private PasswordListAdapter mAdapter;
+    private IFloatingInterface mBinder;
     private static final String TAG = PasswordListActivity.class.getName();
 
     @Override
@@ -68,6 +72,9 @@ public class PasswordListActivity extends BaseActivity {
                 return true;
             case R.id.menu_setting:
                 startActivity(SettingsActivity.class);
+                return true;
+            case R.id.menu_floating:
+                showFloatingWindow();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -119,6 +126,29 @@ public class PasswordListActivity extends BaseActivity {
         Intent intent = new Intent(PasswordListActivity.this, clazz);
         intent.putExtra(JUMP_WITHIN_APP, true);
         startActivity(intent);
+    }
+
+    private void showFloatingWindow() {
+        ServiceConnection connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                mBinder = IFloatingInterface.Stub.asInterface(iBinder);
+                if (mBinder != null) {
+                    try {
+                        mBinder.showFloatingView();
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                mBinder = null;
+            }
+        };
+        Intent intent = new Intent(this, FloatingService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
     }
 
     private static class DeletePasswordTask extends AsyncTask<String, Void, Boolean> {

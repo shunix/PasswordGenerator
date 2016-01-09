@@ -6,7 +6,6 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ public class FloatingView extends LinearLayout {
     private float mCurrentX;
     private float mCurrentY;
     private WindowManager mWindowManager;
-    private ClipboardManager mClipboardManager;
+//    private ClipboardManager mClipboardManager;
     private TextView mPwdText;
 
     private static float DELTA = 5.0f;
@@ -32,7 +31,7 @@ public class FloatingView extends LinearLayout {
     public FloatingView(Context context) {
         super(context);
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        mClipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+//        mClipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         LayoutInflater.from(context).inflate(R.layout.floating_view_layout, this);
         mPwdText = (TextView) findViewById(R.id.pwdText);
     }
@@ -48,16 +47,16 @@ public class FloatingView extends LinearLayout {
             case MotionEvent.ACTION_MOVE: {
                 mCurrentX = event.getRawX();
                 mCurrentY = event.getRawY();
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams((int) mCurrentX, (int) mCurrentY);
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams((int) mCurrentX, (int) mCurrentY);
                 mWindowManager.updateViewLayout(this, params);
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 if (Math.abs(mCurrentX - mPreviousX) < DELTA && Math.abs(mCurrentY - mPreviousY) < DELTA) {
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams((int) mPreviousX, (int) mPreviousY);
+                    WindowManager.LayoutParams params = new WindowManager.LayoutParams((int) mPreviousX, (int) mPreviousY);
                     mWindowManager.updateViewLayout(this, params);
                     try {
-                        mClipboardManager.setPrimaryClip(ClipData.newPlainText(KEY_DATA, mPwdText.getText()));
+//                        mClipboardManager.setPrimaryClip(ClipData.newPlainText(KEY_DATA, mPwdText.getText()));
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
                     }
