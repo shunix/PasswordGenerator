@@ -1,4 +1,4 @@
-package com.shunix.encryptor;
+package com.shunix.encryptor.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
