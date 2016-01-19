@@ -41,4 +41,5 @@
         <item>@string/mid_val</item>
         <item>@string/low_val</item>
     </string-array>
+    <string name="floating">悬浮窗</string>
 </resources>

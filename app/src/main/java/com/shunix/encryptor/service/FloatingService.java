@@ -5,20 +5,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 /**
  * @author rayewang
  * @since 2016/01/19
  */
-public class FloatingService extends Service{
+public class FloatingService extends Service {
     public final static short SHOW_FLOATING_WINDOW = 0;
     public final static short HIDE_FLOATING_WINDOW = 1;
     public final static String KEY = "action";
     public final static String INTENT_ACTION = "com.shunix.encryptor.action";
     private View mFloatingView;
+    private WindowManager mWindowManager;
     BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -45,6 +50,7 @@ public class FloatingService extends Service{
     public void onCreate() {
         super.onCreate();
         registerReceiver(mReceiver, new IntentFilter(INTENT_ACTION));
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
     }
 
     @Override
@@ -60,15 +66,41 @@ public class FloatingService extends Service{
 
     private void showFloatingWindow() {
         buildFloatingView();
+        DisplayMetrics metrics = new DisplayMetrics();
+        if (mWindowManager == null) {
+            return;
+        }
+        mWindowManager.getDefaultDisplay().getMetrics(metrics);
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.type = WindowManager.LayoutParams.TYPE_PHONE;
+        params.format = PixelFormat.RGBA_8888;
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.gravity = Gravity.LEFT | Gravity.TOP;
+        params.width = dpToPx(120);
+        params.height = dpToPx(30);
+        params.x = metrics.widthPixels;
+        params.y = metrics.heightPixels / 2;
+        mFloatingView.setLayoutParams(params);
+        mWindowManager.addView(mFloatingView, params);
     }
 
     private void hideFloatingWindow() {
-
+        if (mFloatingView != null && mWindowManager != null) {
+            mWindowManager.removeView(mFloatingView);
+            mFloatingView = null;
+        }
     }
 
     private void buildFloatingView() {
         if (mFloatingView == null) {
             mFloatingView = new TextView(getApplicationContext());
+            ((TextView) mFloatingView).setText("TEST");
         }
+    }
+
+    private int dpToPx(float dp) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 }

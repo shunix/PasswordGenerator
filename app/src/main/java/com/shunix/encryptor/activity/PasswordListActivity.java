@@ -10,6 +10,7 @@ import android.view.*;
 import android.widget.*;
 import com.shunix.encryptor.R;
 import com.shunix.encryptor.database.DatabaseManager;
+import com.shunix.encryptor.service.FloatingService;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -22,6 +23,7 @@ public class PasswordListActivity extends BaseActivity {
     private ListView mListView;
     private Button mAddButton;
     private PasswordListAdapter mAdapter;
+    private boolean mIsFloatingWindowShowing = false;
     private static final String TAG = PasswordListActivity.class.getName();
 
     @Override
@@ -39,6 +41,8 @@ public class PasswordListActivity extends BaseActivity {
             }
         });
         updateUI();
+        Intent intent = new Intent(this, FloatingService.class);
+        startService(intent);
     }
 
     @Override
@@ -69,9 +73,19 @@ public class PasswordListActivity extends BaseActivity {
             case R.id.menu_setting:
                 startActivity(SettingsActivity.class);
                 return true;
+            case R.id.menu_floating:
+                changeFloatingWindow();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void changeFloatingWindow() {
+        mIsFloatingWindowShowing = !mIsFloatingWindowShowing;
+        Intent intent = new Intent(FloatingService.INTENT_ACTION);
+        intent.putExtra(FloatingService.KEY, mIsFloatingWindowShowing ? FloatingService.HIDE_FLOATING_WINDOW : FloatingService.SHOW_FLOATING_WINDOW);
+        sendBroadcast(intent);
     }
 
     protected void updateUI() {
