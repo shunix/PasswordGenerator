@@ -5,4 +5,5 @@
     <dimen name="name_text">16sp</dimen>
     <dimen name="pwd_text">15sp</dimen>
     <dimen name="btn">17sp</dimen>
+    <dimen name="floating">5sp</dimen>
 </resources>

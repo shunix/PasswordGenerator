@@ -2,6 +2,7 @@ package com.shunix.encryptor.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,7 +12,8 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
+
+import com.shunix.encryptor.view.FloatingView;
 
 /**
  * @author rayewang
@@ -24,6 +26,12 @@ public class FloatingService extends Service {
     public final static String INTENT_ACTION = "com.shunix.encryptor.action";
     private View mFloatingView;
     private WindowManager mWindowManager;
+    private ClipboardManager.OnPrimaryClipChangedListener mOnPrimaryClipChangeListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+        @Override
+        public void onPrimaryClipChanged() {
+
+        }
+    };
     BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -77,8 +85,8 @@ public class FloatingService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.width = dpToPx(120);
-        params.height = dpToPx(30);
+        params.width = dpToPx(160);
+        params.height = dpToPx(40);
         params.x = metrics.widthPixels;
         params.y = metrics.heightPixels / 2;
         mFloatingView.setLayoutParams(params);
@@ -94,8 +102,8 @@ public class FloatingService extends Service {
 
     private void buildFloatingView() {
         if (mFloatingView == null) {
-            mFloatingView = new TextView(getApplicationContext());
-            ((TextView) mFloatingView).setText("TEST");
+            mFloatingView = new FloatingView(getApplicationContext());
+            ((FloatingView) mFloatingView).setText("TEST");
         }
     }
 
