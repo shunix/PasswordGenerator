@@ -23,7 +23,6 @@ public class PasswordListActivity extends BaseActivity {
     private ListView mListView;
     private Button mAddButton;
     private PasswordListAdapter mAdapter;
-    private boolean mIsFloatingWindowShowing = false;
     private static final String TAG = PasswordListActivity.class.getName();
 
     @Override
@@ -74,17 +73,16 @@ public class PasswordListActivity extends BaseActivity {
                 startActivity(SettingsActivity.class);
                 return true;
             case R.id.menu_floating:
-                changeFloatingWindow();
+                showFloatingWindow();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void changeFloatingWindow() {
-        mIsFloatingWindowShowing = !mIsFloatingWindowShowing;
+    private void showFloatingWindow() {
         Intent intent = new Intent(FloatingService.INTENT_ACTION);
-        intent.putExtra(FloatingService.KEY, mIsFloatingWindowShowing ? FloatingService.HIDE_FLOATING_WINDOW : FloatingService.SHOW_FLOATING_WINDOW);
+        intent.putExtra(FloatingService.KEY, FloatingService.SHOW_FLOATING_WINDOW);
         sendBroadcast(intent);
     }
 

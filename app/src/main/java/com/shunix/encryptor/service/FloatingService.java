@@ -1,11 +1,7 @@
 package com.shunix.encryptor.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -24,14 +20,9 @@ public class FloatingService extends Service {
     public final static short HIDE_FLOATING_WINDOW = 1;
     public final static String KEY = "action";
     public final static String INTENT_ACTION = "com.shunix.encryptor.action";
+    private boolean mIsShow = false;
     private View mFloatingView;
     private WindowManager mWindowManager;
-    private ClipboardManager.OnPrimaryClipChangedListener mOnPrimaryClipChangeListener = new ClipboardManager.OnPrimaryClipChangedListener() {
-        @Override
-        public void onPrimaryClipChanged() {
-
-        }
-    };
     BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -73,6 +64,9 @@ public class FloatingService extends Service {
     }
 
     private void showFloatingWindow() {
+        if (mIsShow) {
+            return;
+        }
         buildFloatingView();
         DisplayMetrics metrics = new DisplayMetrics();
         if (mWindowManager == null) {
@@ -91,12 +85,14 @@ public class FloatingService extends Service {
         params.y = metrics.heightPixels / 2;
         mFloatingView.setLayoutParams(params);
         mWindowManager.addView(mFloatingView, params);
+        mIsShow = true;
     }
 
     private void hideFloatingWindow() {
         if (mFloatingView != null && mWindowManager != null) {
             mWindowManager.removeView(mFloatingView);
             mFloatingView = null;
+            mIsShow = false;
         }
     }
 

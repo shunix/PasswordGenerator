@@ -1,6 +1,7 @@
 package com.shunix.encryptor.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -17,7 +18,8 @@ import com.shunix.encryptor.service.FloatingService;
  * @since 2016/01/20
  */
 public class FloatingView extends TextView {
-    private final static String TAG = FloatingService.class.getName();
+    private final static String TAG = FloatingView.class.getName();
+    private long mLastTapTime;
     private WindowManager mWindowManager;
     public FloatingView(Context context) {
         super(context);
@@ -33,6 +35,13 @@ public class FloatingView extends TextView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 setBackgroundResource(R.drawable.lock_edit_text_shape_pressed);
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - mLastTapTime <= 300) {
+                    Intent intent = new Intent(FloatingService.INTENT_ACTION);
+                    intent.putExtra(FloatingService.KEY, FloatingService.HIDE_FLOATING_WINDOW);
+                    getContext().sendBroadcast(intent);
+                }
+                mLastTapTime = currentTime;
                 Log.d(TAG, "ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_UP:
@@ -41,8 +50,8 @@ public class FloatingView extends TextView {
                 break;
             case MotionEvent.ACTION_MOVE:
                 setBackgroundResource(R.drawable.lock_edit_text_shape_pressed);
-                float positionX = event.getRawX() - (getWidth() - getX());
-                float positionY = event.getRawY() - (getHeight() - getY());
+                float positionX = event.getRawX() - (getWidth() / 2);
+                float positionY = event.getRawY() - getHeight();
                 WindowManager.LayoutParams params = (WindowManager.LayoutParams) getLayoutParams();
                 params.x = (int) positionX;
                 params.y = (int) positionY;
