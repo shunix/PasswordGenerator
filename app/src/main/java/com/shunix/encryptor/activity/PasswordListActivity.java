@@ -23,6 +23,40 @@ public class PasswordListActivity extends BaseActivity {
     private ListView mListView;
     private Button mAddButton;
     private PasswordListAdapter mAdapter;
+    private ActionMode mActionMode;
+    private int mSelection;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            MenuInflater inflater = actionMode.getMenuInflater();
+            inflater.inflate(R.menu.context_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.menu_delete:
+                    deletePwdItem();
+                    return true;
+                case R.id.menu_floating:
+                    showFloatingWindow();
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            mActionMode = null;
+        }
+    };
     private static final String TAG = PasswordListActivity.class.getName();
 
     @Override
@@ -72,18 +106,9 @@ public class PasswordListActivity extends BaseActivity {
             case R.id.menu_setting:
                 startActivity(SettingsActivity.class);
                 return true;
-            case R.id.menu_floating:
-                showFloatingWindow();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showFloatingWindow() {
-        Intent intent = new Intent(FloatingService.INTENT_ACTION);
-        intent.putExtra(FloatingService.KEY, FloatingService.SHOW_FLOATING_WINDOW);
-        sendBroadcast(intent);
     }
 
     protected void updateUI() {
@@ -94,33 +119,16 @@ public class PasswordListActivity extends BaseActivity {
         } else {
             mAddButton.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
+            mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
             mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    final int pos = position;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PasswordListActivity.this);
-                    DialogInterface.OnClickListener onConfirmListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                DeletePasswordTask task = new DeletePasswordTask(PasswordListActivity.this);
-                                task.execute(mAdapter.getItem(pos).name);
-                            } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
-                            }
-                        }
-                    };
-                    DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            return;
-                        }
-                    };
-                    builder.setTitle(getString(R.string.warning))
-                            .setMessage(getString(R.string.confirm_hint))
-                            .setPositiveButton(R.string.yes, onConfirmListener)
-                            .setNegativeButton(R.string.no, onCancelListener)
-                            .show();
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (mActionMode != null) {
+                        return false;
+                    }
+                    mActionMode = startActionMode(mActionModeCallback);
+                    // bad implementation, the mSelection may take side effect to the deletePwdItem() method
+                    mSelection = i;
                     return true;
                 }
             });
@@ -131,6 +139,44 @@ public class PasswordListActivity extends BaseActivity {
         Intent intent = new Intent(PasswordListActivity.this, clazz);
         intent.putExtra(JUMP_WITHIN_APP, true);
         startActivity(intent);
+    }
+
+    private void showFloatingWindow() {
+        Intent intent = new Intent(FloatingService.INTENT_ACTION);
+        intent.putExtra(FloatingService.KEY, FloatingService.SHOW_FLOATING_WINDOW);
+        sendBroadcast(intent);
+        mActionMode.finish();
+    }
+
+    private void deletePwdItem() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PasswordListActivity.this);
+        DialogInterface.OnClickListener onConfirmListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    DatabaseManager.PasswordEntity entity = mAdapter.getItem(mSelection);
+                    if (entity == null) {
+                        return;
+                    }
+                    DeletePasswordTask task = new DeletePasswordTask(PasswordListActivity.this);
+                    task.execute(entity.name);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        };
+        DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        };
+        builder.setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.confirm_hint))
+                .setPositiveButton(R.string.yes, onConfirmListener)
+                .setNegativeButton(R.string.no, onCancelListener)
+                .show();
+        mActionMode.finish();
     }
 
     private static class DeletePasswordTask extends AsyncTask<String, Void, Boolean> {

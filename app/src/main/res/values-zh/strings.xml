@@ -42,4 +42,5 @@
         <item>@string/low_val</item>
     </string-array>
     <string name="floating">悬浮窗</string>
+    <string name="delete">删除</string>
 </resources>

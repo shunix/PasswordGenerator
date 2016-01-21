@@ -42,4 +42,5 @@
     </string-array>
     <string name="settings">Settings</string>
     <string name="floating">Floating</string>
+    <string name="delete">Delete</string>
 </resources>
