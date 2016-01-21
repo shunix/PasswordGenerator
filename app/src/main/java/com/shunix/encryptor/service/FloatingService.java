@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.*;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -19,14 +20,17 @@ public class FloatingService extends Service {
     public final static short SHOW_FLOATING_WINDOW = 0;
     public final static short HIDE_FLOATING_WINDOW = 1;
     public final static String KEY = "action";
+    public final static String DATA = "data";
     public final static String INTENT_ACTION = "com.shunix.encryptor.action";
     private boolean mIsShow = false;
+    private String mData;
     private View mFloatingView;
     private WindowManager mWindowManager;
     BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             short action = intent.getShortExtra(KEY, HIDE_FLOATING_WINDOW);
+            mData = intent.getStringExtra(DATA);
             switch (action) {
                 case SHOW_FLOATING_WINDOW:
                     showFloatingWindow();
@@ -65,6 +69,9 @@ public class FloatingService extends Service {
 
     private void showFloatingWindow() {
         if (mIsShow) {
+            if (!TextUtils.isEmpty(mData) && !mData.equals(((FloatingView) mFloatingView).getText())) {
+                ((FloatingView) mFloatingView).setText(mData);
+            }
             return;
         }
         buildFloatingView();
@@ -99,7 +106,9 @@ public class FloatingService extends Service {
     private void buildFloatingView() {
         if (mFloatingView == null) {
             mFloatingView = new FloatingView(getApplicationContext());
-            ((FloatingView) mFloatingView).setText("TEST");
+            if (!TextUtils.isEmpty(mData) && !mData.equals(((FloatingView) mFloatingView).getText())) {
+                ((FloatingView) mFloatingView).setText(mData);
+            }
         }
     }
 

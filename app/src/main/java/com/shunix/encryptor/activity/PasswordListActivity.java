@@ -144,6 +144,10 @@ public class PasswordListActivity extends BaseActivity {
     private void showFloatingWindow() {
         Intent intent = new Intent(FloatingService.INTENT_ACTION);
         intent.putExtra(FloatingService.KEY, FloatingService.SHOW_FLOATING_WINDOW);
+        DatabaseManager.PasswordEntity entity = mAdapter.getItem(mSelection);
+        if (entity != null) {
+            intent.putExtra(FloatingService.DATA, entity.password);
+        }
         sendBroadcast(intent);
         mActionMode.finish();
     }
